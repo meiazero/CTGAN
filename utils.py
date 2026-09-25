@@ -8,7 +8,7 @@ import cv2
 import torch
 import torch.nn as nn
 
-from skimage.measure import compare_psnr, compare_ssim
+from skimage.metrics import peak_signal_noise_ratio as compare_psnr, structural_similarity as compare_ssim  # skimage >= 0.18 moved and renamed them
 
 def fixed_seed(myseed):
     np.random.seed(myseed)
@@ -92,7 +92,7 @@ def save_image(image, save_path, image_name):
 
 def psnr_ssim_cal(cloudfree, predict):
     psnr = compare_psnr(cloudfree, predict)
-    ssim = compare_ssim(cloudfree, predict, multichannel = True, gaussian_weights = True, use_sample_covariance = False, sigma = 1.5)
+    ssim = compare_ssim(cloudfree, predict, channel_axis = -1, gaussian_weights = True, use_sample_covariance = False, sigma = 1.5)
     return psnr, ssim
 
 def PSNR_SSIM(cloudless, predict, save_path):
