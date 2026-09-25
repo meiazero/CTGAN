@@ -80,3 +80,8 @@ Our developed CTGAN was inspired by STGAN ([paper here](https://arxiv.org/abs/19
   pages={511-515},
   doi={10.1109/ICIP46576.2022.9897229}}
 ```
+
+## Checks before push
+
+Run `git config core.hooksPath .githooks` once per clone. `.githooks/pre-push` then
+refuses a push that fails `uvx ruff format --check .` or `uvx ruff check .`.
