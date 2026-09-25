@@ -27,14 +27,20 @@ cd CTGAN
 
 ### Computer equipments
 - System: Ubuntu20.04
-- Python version: Python 3.6 or higher
+- Python version: 3.12 (pinned in `.python-version`)
 - Training:\
   CPU: Intel(R) Xeon(R) Gold 6226R CPU @ 2.90GHz\
   RAM: 256GB\
   GPU: NVIDIA GeForce RTX 3090 24GB
 
 ### Install Packages
-Please see the ```requirements.txt``` for more details.
+The environment is managed by [uv](https://docs.astral.sh/uv) (`pyproject.toml`, `uv.lock`;
+torch from the CUDA 12.6 index):
+
+```bash
+uv sync
+uv run python train.py --help
+```
 
 ### Prepare data
 
@@ -48,13 +54,13 @@ We provide CTGAN pretrained model on the Sen2_MTC dataset. You can download the 
 ### Inference
 - You should first download the pretrained models from [here](https://drive.google.com/file/d/1-hDX9ezWZI2OtiaGbE8RrKJkN1X-ZO1P/view?usp=share_link) or train CTGAN by yourself.
 ``` bash
-python test.py  --load_gen path/to/model --root path/to/dataset --test_mode val/test
+uv run python test.py  --load_gen path/to/model --root path/to/dataset --test_mode val/test
 ```
 
 ### Training
 - You can use the following command to train CTGAN from scratch
 ``` bash
-python train.py --root path/to/dataset --cloud_model_path path/to/Feature_Extrator_FS2.pth --dataset_name Sen2_MTC --batch_size 4 --load_gen '' --load_dis '' 
+uv run python train.py --root path/to/dataset --cloud_model_path path/to/Feature_Extrator_FS2.pth --dataset_name Sen2_MTC --batch_size 4 --load_gen '' --load_dis '' 
 ```
 - You can monitor the training process using ```$ tensorboard --logdir=runs``` and then go to the URL [http://localhost:6006/](http://localhost:6006/)
 - If you have any implementation problems, please feel free to e-mail me! come880412@gmail.com
