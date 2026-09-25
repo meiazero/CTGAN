@@ -5,40 +5,45 @@ description = "CTGAN (Huang & Wu, ICIP 2022) fork"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-  "einops>=0.8",
-  "numpy>=2.1",
-  "opencv-python-headless>=4.10",
-  "pillow>=10",
-  "scikit-image>=0.24",
-  "tensorboardx>=2.6",
-  "tifffile>=2024.8",
-  "torch>=2.6",
-  "torchvision>=0.21",
-  "tqdm>=4.66",
+    "einops>=0.8.2",
+    "torch>=2.14.0",
 ]
 
 [dependency-groups]
-dev = ["pytest>=8", "ruff>=0.8"]
+dev = [
+    "pytest>=9.1.1",
+    "ruff>=0.16.9",
+]
+scripts = [
+    "numpy>=2.5.3",
+    "opencv-python-headless>=5.0.0.93",
+    "pillow>=12.3.0",
+    "scikit-image>=0.26.0",
+    "tensorboardx>=2.6.5",
+    "tifffile>=2026.9.20",
+    "torchvision>=0.29.0",
+    "tqdm>=4.70.1",
+]
+
+# The networks are a package (src/ctgan/, symlinks to model/) that other projects depend on; a
+# library does not pin a torch build, so torch comes from PyPI unless the application that
+# installs it pins one.
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ctgan"]
 
 [tool.uv]
-package = false
+default-groups = ["dev", "scripts"]  # `uv sync` here still installs what the scripts need
 
 [tool.ruff]
-# Upstream CTGAN code keeps its own style.
-extend-exclude = ["model", "dataset.py", "test.py", "train.py", "train_val_split.py", "utils.py"]
+# Upstream CTGAN code keeps its own style (src/ctgan/ links to it).
+extend-exclude = ["model", "src", "dataset.py", "test.py", "train.py", "train_val_split.py", "utils.py"]
 line-length = 100
 target-version = "py312"
 
 [tool.ruff.lint]
 select = ["E", "F", "I", "W", "UP", "B", "SIM", "C4", "PTH", "RUF"]
 ignore = ["RUF001", "RUF002", "RUF003"]
-
-# cu126 wheels: the PyPI torch wheel targets CUDA 13, which needs a newer NVIDIA driver.
-[[tool.uv.index]]
-name = "pytorch-cu126"
-url = "https://download.pytorch.org/whl/cu126"
-explicit = true
-
-[tool.uv.sources]
-torch = { index = "pytorch-cu126" }
-torchvision = { index = "pytorch-cu126" }

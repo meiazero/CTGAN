@@ -34,8 +34,10 @@ cd CTGAN
   GPU: NVIDIA GeForce RTX 3090 24GB
 
 ### Install Packages
-The environment is managed by [uv](https://docs.astral.sh/uv) (`pyproject.toml`, `uv.lock`;
-torch from the CUDA 12.6 index):
+The environment is managed by [uv](https://docs.astral.sh/uv) (`pyproject.toml`, `uv.lock`).
+The generator and discriminator are also an installable package, `ctgan` (`src/ctgan/`,
+symlinks to `model/`), which other projects add as a path dependency; as a library it does not
+pin a torch build, so torch comes from PyPI here. `uv sync` also installs the `scripts` group:
 
 ```bash
 uv sync
